@@ -34,7 +34,6 @@
     "graphql": "^15.4.0",
     "graphql-tools": "^7.0.2",
     "pg": "^8.5.1",
-    "postgres": "^1.0.2",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4",
