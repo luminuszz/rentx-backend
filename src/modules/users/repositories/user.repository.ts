@@ -31,9 +31,11 @@ export class UserRepository
   }
 
   public async editUser(fields: EditUserDTO): Promise<User> {
-    const user = await this.findOneUser({ column: 'id', value: fields.id })
+    const { id, ...values } = fields
 
-    const editedUser = this.create({ ...user, ...fields })
+    const user = await this.findOneUser({ column: 'id', value: id })
+
+    const editedUser = this.create({ ...user, ...values })
 
     await this.save(editedUser)
 

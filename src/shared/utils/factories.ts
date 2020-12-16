@@ -13,7 +13,7 @@ export class UserFactory {
     return {
       email: internet.email(),
       name: name.firstName(),
-      password: random.alphaNumeric(),
+      password: random.words(),
     }
   }
 

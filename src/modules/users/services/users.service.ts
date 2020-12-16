@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common'
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common'
 import { HashService } from '../../../shared/providers/hash/hash.service'
 import { CreateUserDTO } from '../dtos/createUser.dto'
 import { EditUserDTO } from '../dtos/editUser.dto'
@@ -28,9 +32,12 @@ export class UsersService {
       throw new UnauthorizedException('User already existis')
     }
 
-    const newUser = await this.userRepository.createUser(data)
+    const hash = await this.hashService.createHash(data.password)
 
-    newUser.password = await this.hashService.createHash(newUser.password)
+    const newUser = await this.userRepository.createUser({
+      ...data,
+      password: hash,
+    })
 
     return newUser
   }
@@ -40,6 +47,26 @@ export class UsersService {
   }
 
   public async editUser(fields: EditUserDTO): Promise<User> {
+    const foundedUser = await this.userRepository.findOneUser({
+      column: 'id',
+      value: fields.id,
+    })
+
+    if (!foundedUser) {
+      throw new BadRequestException('user not found')
+    }
+
+    const verifyPassword = await this.hashService.validateHash(
+      fields.password,
+      foundedUser.password
+    )
+
+    if (!verifyPassword) {
+      throw new UnauthorizedException('Invalid credentials')
+    }
+
+    fields.password = await this.hashService.createHash(fields.password)
+
     const editedUser = await this.userRepository.editUser(fields)
 
     return editedUser

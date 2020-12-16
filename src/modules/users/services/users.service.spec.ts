@@ -81,10 +81,10 @@ describe('UsersService', () => {
     it('should ble able to edit user', async () => {
       const newUser = UserFactory.getUserRequest()
 
-      const { password, id } = await service.createUser(newUser)
+      const { id } = await service.createUser(newUser)
 
       const editedUser = await service.editUser({
-        password,
+        password: newUser.password,
         id,
         name: 'cavalo',
       })
@@ -97,13 +97,27 @@ describe('UsersService', () => {
 
       const savedUser = await service.createUser(newUser)
 
-      savedUser.id = 'id inválido'
-
-      const { password, id } = savedUser
+      const { password } = savedUser
 
       await expect(
-        service.editUser({ password, id, name: 'editado' })
+        service.editUser({ password, id: 'id inválido', name: 'editado' })
       ).rejects.toBeInstanceOf(BadRequestException)
+    })
+
+    it('should not be able to edit user if current password does not match', async () => {
+      const newUser = UserFactory.getUserRequest()
+
+      const savedUser = await service.createUser(newUser)
+
+      console.log(savedUser.password)
+
+      await expect(
+        service.editUser({
+          password: 'password invalid',
+          id: savedUser.id,
+          name: 'editado',
+        })
+      ).rejects.toBeInstanceOf(UnauthorizedException)
     })
   })
 })
