@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common'
-import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { GraphQLModule } from '@nestjs/graphql'
@@ -13,7 +12,7 @@ import { UsersModule } from './modules/users/users.module'
     UsersModule,
     GraphQLModule.forRoot(gqlModuleConfig),
   ],
-  controllers: [AppController],
+
   providers: [AppService],
 })
 export class AppModule {}
