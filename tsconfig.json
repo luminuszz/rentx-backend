@@ -10,6 +10,11 @@
     "sourceMap": true,
     "outDir": "./dist",
     "incremental": true,
-    "baseUrl": "./"
+    "baseUrl": "./",
+    "paths": {
+      "@modules/*": ["modules/*"],
+      "@Config/*": ["config/*"],
+      "@shared/*": ["shared/*"]
+    },
   }
 }
