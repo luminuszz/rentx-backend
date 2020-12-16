@@ -51,15 +51,16 @@ describe('UsersService', () => {
 
   describe('getUsers', () => {
     it('should be able to get all users', async () => {
-      const users = UserFactory.getManyUser(5)
+      const users = UserFactory.getManyUser(2)
 
-      users.forEach(async user => {
-        await service.createUser(user)
-      })
+      await service.createUser(users[0])
+      await service.createUser(users[1])
 
-      const currenUsers = await service.getAllUsers()
+      const currentUsers = await service.getAllUsers()
 
-      expect(currenUsers).toHaveLength(5)
+      console.log(currentUsers)
+
+      expect(currentUsers).toHaveLength(2)
     })
   })
 

@@ -5,7 +5,7 @@ import { hash, compare } from 'bcrypt'
 @Injectable()
 export class BcryptHashProvider implements IHashProvider {
   public async createHash(value: string): Promise<string> {
-    const newHash = await hash(value, 15)
+    const newHash = await hash(value, 10)
 
     return newHash
   }
