@@ -16,7 +16,7 @@ export class User extends BaseEntity {
 
   @Column('varchar', { nullable: true })
   @Field({ nullable: true })
-  image: string
+  image?: string
 
   @Column('varchar', { nullable: false })
   @Field({ nullable: false })
