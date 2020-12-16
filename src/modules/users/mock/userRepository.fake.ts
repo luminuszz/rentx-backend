@@ -3,6 +3,7 @@ import { CreateUserDTO } from '../dtos/createUser.dto'
 import { IUserRepository } from '../dtos/IUserRepository'
 import { User, UserRole } from '../entities/user.entity'
 import { Field } from '../dtos/Field'
+import { EditUserDTO } from '../dtos/editUser.dto'
 
 export class FakeUserRepository implements IUserRepository {
   private users: User[] = []
@@ -37,5 +38,19 @@ export class FakeUserRepository implements IUserRepository {
 
   public async find(): Promise<User[]> {
     return this.users
+  }
+
+  public async deleteUser(userId: string): Promise<void> {
+    const filterUsers = this.users.filter(user => user.id !== userId)
+
+    this.users = filterUsers
+  }
+
+  public async editUser(fields: EditUserDTO): Promise<User> {
+    const currentIndex = this.users.findIndex(user => user.id === fields.id)
+
+    this.users[currentIndex] = { ...this.users[currentIndex], ...fields }
+
+    return this.users[currentIndex]
   }
 }

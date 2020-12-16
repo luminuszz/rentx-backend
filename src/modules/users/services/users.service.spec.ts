@@ -1,4 +1,4 @@
-import { UnauthorizedException } from '@nestjs/common'
+import { BadRequestException, UnauthorizedException } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
 import { HashModuleProvider } from '../../../shared/providers/hash/hash.module'
 import { FakeUserRepository } from '../mock/userRepository.fake'
@@ -49,7 +49,7 @@ describe('UsersService', () => {
     })
   })
 
-  describe('getUsers', async () => {
+  describe('getUsers', () => {
     it('should be able to get all users', async () => {
       const users = UserFactory.getManyUser(5)
 
@@ -60,6 +60,50 @@ describe('UsersService', () => {
       const currenUsers = await service.getAllUsers()
 
       expect(currenUsers).toHaveLength(5)
+    })
+  })
+
+  describe('deleteUser', () => {
+    it('should be able to delete user', async () => {
+      const newUser = UserFactory.getUserRequest()
+
+      const user = await service.createUser(newUser)
+
+      await service.deleteUser(user.id)
+
+      const allUsers = await service.getAllUsers()
+
+      expect(allUsers).not.toContain(user)
+    })
+  })
+
+  describe('editUser', () => {
+    it('should ble able to edit user', async () => {
+      const newUser = UserFactory.getUserRequest()
+
+      const { password, id } = await service.createUser(newUser)
+
+      const editedUser = await service.editUser({
+        password,
+        id,
+        name: 'cavalo',
+      })
+
+      expect(editedUser.name).toEqual('cavalo')
+    })
+
+    it('should not be able to edit user if currentUser not exists', async () => {
+      const newUser = UserFactory.getUserRequest()
+
+      const savedUser = await service.createUser(newUser)
+
+      savedUser.id = 'id inválido'
+
+      const { password, id } = savedUser
+
+      await expect(
+        service.editUser({ password, id, name: 'editado' })
+      ).rejects.toBeInstanceOf(BadRequestException)
     })
   })
 })

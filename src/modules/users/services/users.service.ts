@@ -1,10 +1,7 @@
-import {
-  BadRequestException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common'
+import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { HashService } from '../../../shared/providers/hash/hash.service'
 import { CreateUserDTO } from '../dtos/createUser.dto'
+import { EditUserDTO } from '../dtos/editUser.dto'
 import { User } from '../entities/user.entity'
 import { UserRepository } from '../repositories/user.repository'
 
@@ -36,5 +33,15 @@ export class UsersService {
     newUser.password = await this.hashService.createHash(newUser.password)
 
     return newUser
+  }
+
+  public async deleteUser(userId: string): Promise<void> {
+    await this.userRepository.deleteUser(userId)
+  }
+
+  public async editUser(fields: EditUserDTO): Promise<User> {
+    const editedUser = await this.userRepository.editUser(fields)
+
+    return editedUser
   }
 }

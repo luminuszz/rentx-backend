@@ -3,18 +3,19 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm'
-import { Field, GraphQLISODateTime, ID } from '@nestjs/graphql'
+import { Field, GraphQLISODateTime, ID, ObjectType } from '@nestjs/graphql'
 
+@ObjectType()
 export class BaseEntity {
   @PrimaryGeneratedColumn('uuid')
-  @Field(ID)
+  @Field(() => ID)
   id: string
 
   @CreateDateColumn({ name: 'created_at' })
-  @Field(GraphQLISODateTime)
+  @Field(() => GraphQLISODateTime)
   createdAt: Date
 
   @UpdateDateColumn({ name: 'updated_at' })
-  @Field(GraphQLISODateTime)
+  @Field(() => GraphQLISODateTime)
   updatedAt: Date
 }

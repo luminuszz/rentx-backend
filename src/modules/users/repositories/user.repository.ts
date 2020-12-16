@@ -1,5 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm'
 import { CreateUserDTO } from '../dtos/createUser.dto'
+import { EditUserDTO } from '../dtos/editUser.dto'
 import { Field } from '../dtos/Field'
 import { IUserRepository } from '../dtos/IUserRepository'
 import { User } from '../entities/user.entity'
@@ -23,5 +24,19 @@ export class UserRepository
     const user = await this.findOne({ where: { [column]: value } })
 
     return user
+  }
+
+  public async deleteUser(userId: string): Promise<void> {
+    await this.delete(userId)
+  }
+
+  public async editUser(fields: EditUserDTO): Promise<User> {
+    const user = await this.findOneUser({ column: 'id', value: fields.id })
+
+    const editedUser = this.create({ ...user, ...fields })
+
+    await this.save(editedUser)
+
+    return editedUser
   }
 }
