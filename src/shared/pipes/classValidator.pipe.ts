@@ -30,7 +30,7 @@ export class ClassValidatorPipe implements PipeTransform {
 
   private serializeErrors(erros: ValidationError[]) {
     const serialize = erros.map(({ property, constraints }) => {
-      return { field: property, message: constraints.length }
+      return { field: property, message: constraints }
     })
     return serialize
   }

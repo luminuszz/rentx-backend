@@ -1,6 +1,15 @@
 import { GraphQLError } from 'graphql'
 
-export const formatterErrors = (error: GraphQLError): any => {
+type Path = string | number
+
+interface ErrorHandler {
+  message: string
+  path: readonly Path[]
+  originalError: Error
+  query: string
+}
+
+export const formatterErrors = (error: GraphQLError): ErrorHandler => {
   const { message, path, originalError, source } = error
 
   return {

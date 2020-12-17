@@ -6,11 +6,13 @@ import { jwtConfig } from '../../config/jtw.config'
 import { UsersModule } from '../users/users.module'
 import { JwtStrategy } from './strategies/jwt.strategy'
 import { HashModuleProvider } from '../../shared/providers/hash/hash.module'
+import { PassportModule } from '@nestjs/passport'
 
 @Module({
   imports: [
     UsersModule,
     HashModuleProvider,
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: jwtConfig.secret,
       signOptions: { expiresIn: jwtConfig.expire },
