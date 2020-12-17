@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common'
 import { EntityRepository, Repository } from 'typeorm'
 import { CreateUserDTO } from '../dtos/createUser.dto'
 import { EditUserDTO } from '../dtos/editUser.dto'
@@ -5,6 +6,7 @@ import { Field } from '../dtos/Field'
 import { IUserRepository } from '../dtos/IUserRepository'
 import { User } from '../entities/user.entity'
 
+@Injectable()
 @EntityRepository(User)
 export class UserRepository
   extends Repository<User>

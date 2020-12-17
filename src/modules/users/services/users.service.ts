@@ -71,4 +71,13 @@ export class UsersService {
 
     return editedUser
   }
+
+  public async findOneUser<T = string>(
+    column: keyof User,
+    value: User[keyof User]
+  ): Promise<User> {
+    const currentUser = await this.userRepository.findOneUser({ column, value })
+
+    return currentUser
+  }
 }
