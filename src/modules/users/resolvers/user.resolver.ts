@@ -3,11 +3,13 @@ import { CreateUserDTO } from '../dtos/createUser.dto'
 import { EditUserDTO } from '../dtos/editUser.dto'
 import { User } from '../entities/user.entity'
 import { UsersService } from '../services/users.service'
+import { AuthType } from '../../auth/decorators/authType.decorator'
 
 @Resolver(User)
 export class UserResolver {
   constructor(private readonly userService: UsersService) {}
 
+  @AuthType('jwt', 'admin')
   @Query(() => [User])
   public async getAllUsers(): Promise<User[]> {
     const users = await this.userService.getAllUsers()

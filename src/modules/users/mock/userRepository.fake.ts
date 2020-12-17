@@ -1,4 +1,4 @@
-import { uuid } from 'uuidv4'
+import { v4 } from 'uuid'
 import { CreateUserDTO } from '../dtos/createUser.dto'
 import { IUserRepository } from '../dtos/IUserRepository'
 import { User, UserRole } from '../entities/user.entity'
@@ -19,7 +19,7 @@ export class FakeUserRepository implements IUserRepository {
       ...data,
       createdAt: new Date(),
       updatedAt: new Date(),
-      id: uuid(),
+      id: v4(),
       role: UserRole.user,
     })
     this.users.push(newUser)
