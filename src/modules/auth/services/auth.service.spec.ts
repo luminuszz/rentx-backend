@@ -7,6 +7,7 @@ import { HashModuleProvider } from '../../../shared/providers/hash/hash.module'
 import { UserFactory } from '../../../shared/utils/factories'
 import { FakeUserRepository } from '../../users/mock/userRepository.fake'
 import { UserRepository } from '../../users/repositories/user.repository'
+import { UnauthorizedException } from '@nestjs/common'
 
 describe('authService', () => {
   let authService: AuthService
@@ -99,6 +100,40 @@ describe('authService', () => {
       const { token } = await authService.createToken({ email, id, name, role })
 
       expect(typeof token).toBe('string')
+    })
+  })
+
+  describe('login', () => {
+    it('should be able to login', async () => {
+      const newUser = UserFactory.getUserRequest()
+
+      const user = await usersService.createUser({
+        ...newUser,
+        password: '123456',
+      })
+
+      const response = await authService.login({
+        email: user.email,
+        password: '123456',
+      })
+
+      expect(response).toHaveProperty('user')
+    })
+
+    it('should not be able to login with credentials wrong', async () => {
+      const newUser = UserFactory.getUserRequest()
+
+      const user = await usersService.createUser({
+        ...newUser,
+        password: '123456',
+      })
+
+      await expect(
+        authService.login({
+          email: user.email,
+          password: 'senha inválida',
+        })
+      ).rejects.toBeInstanceOf(UnauthorizedException)
     })
   })
 })
