@@ -34,7 +34,7 @@ export class AuthService {
     return foundedUser
   }
 
-  private async createToken(payload: PayloadDTO): Promise<{ token: string }> {
+  public async createToken(payload: PayloadDTO): Promise<{ token: string }> {
     const token = await this.jwtService.signAsync(payload)
 
     return {
