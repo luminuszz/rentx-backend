@@ -6,8 +6,6 @@ export enum FactoryKey {
   adminUser = 'admin',
 }
 
-console.log(name.findName())
-
 export class UserFactory {
   public static getUserRequest(): CreateUserDTO {
     return {

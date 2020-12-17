@@ -58,8 +58,6 @@ describe('UsersService', () => {
 
       const currentUsers = await service.getAllUsers()
 
-      console.log(currentUsers)
-
       expect(currentUsers).toHaveLength(2)
     })
   })
@@ -109,8 +107,6 @@ describe('UsersService', () => {
       const newUser = UserFactory.getUserRequest()
 
       const savedUser = await service.createUser(newUser)
-
-      console.log(savedUser.password)
 
       await expect(
         service.editUser({
